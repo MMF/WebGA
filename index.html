@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
+    <meta name="author" content="Mohamad M. Fouad">
+    <meta name="authorUrl" content="https://scholar.google.com/citations?hl=en&user=-50Yh_AAAAAJ&view_op=list_works&sortby=pubdate">
+    <meta name="keywords" content="Clinic, ClinicApp, Clinic_Management, Hospital, Doctor">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-9 mb-2">
+                <div class="card">
+                    <div class="card-header bg-success text-white">Control Parameters</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12 mb-2">
+                                <strong>Generations Count</strong><br />
+                                <input type="number" class="form-control" id="GenerationsCount" value="30" />
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 mb-2">
+                                <strong>Solutions Count</strong><br />
+                                <input type="number" class="form-control" id="SolutionsCount" value="6" />
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 mb-2">
+                                <strong>Genes Count</strong><br />
+                                <input type="number" class="form-control" id="GenesCount" value="10" />
+                            </div>
+                        </div>  
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12 mb-2">
+                                <strong>Parent Selection</strong><br />
+                                <select class="form-control" id="SelectionTechnique">
+                                    <option value="1">Roulette Wheel</option>
+                                    <option value="2">Rank Selection</option>
+                                    <option value="3">Tournament</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 mb-2">
+                                <strong>Crossover Probability</strong><br />
+                                <select id="CrossoverProbability" class="form-control">
+                                    <option value="0.1">0.1</option>
+                                    <option value="0.2">0.2</option>
+                                    <option value="0.3">0.3</option>
+                                    <option value="0.4">0.4</option>
+                                    <option value="0.5" selected>0.5</option>
+                                    <option value="0.6">0.6</option>
+                                    <option value="0.7">0.7</option>
+                                    <option value="0.8">0.8</option>
+                                    <option value="0.9">0.9</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 mb-2">
+                                <strong>Mutation Probability</strong><br />
+                                <select id="MutationProbability" class="form-control">
+                                    <option value="0.1">0.1</option>
+                                    <option value="0.2">0.2</option>
+                                    <option value="0.3">0.3</option>
+                                    <option value="0.4">0.4</option>
+                                    <option value="0.5" selected>0.5</option>
+                                    <option value="0.6">0.6</option>
+                                    <option value="0.7">0.7</option>
+                                    <option value="0.8">0.8</option>
+                                    <option value="0.9">0.9</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div> 
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <strong>Elitism</strong><br />
+                                <select class="form-control" id="ElitismStatus">
+                                    <option value="1">Enable Elitism</option>
+                                    <option value="0">Disable Elitism</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <br />
+                                <button type="button" class="btn btn-success" id="RunGABtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                                      </svg>
+                                       
+                                    Start
+                                </button>
+                            </div>
+                            <div class="col-md-4 col-sm-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 mb-2">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">Fitness Function</div>
+                    <div class="card-body">
+                        <img src="img/F1.png" class="img-fluid mt-2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-4 col-sm-12 mb-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">Log</div>
+                    <div class="card-body" style="min-height: 300px; max-height: 300px; overflow-y: scroll;">
+                        <div class="mb-2" id="BestSolutionContainer" style="display: none;">
+                            <span class="badge bg-secondary">Best Solution</span> &nbsp;
+                            <span class="text-primary" id="BestSolution"></span>
+                        </div>
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Generation</td>
+                                    <th>Best Fitness</td>
+                                </tr>
+                            </thead>
+                            <tbody id="ConvergenceValues">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-12 mb-3">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">Convergence Curve</div>
+                    <div class="card-body" style="min-height: 300px;">
+                        <canvas class="w-100" id="ConvergenceCurve" style="height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/GA/GeneticAlgorithm.js"></script>
+    <script src="js/chart.min.js"></script>
+    <script src="js/GA/main.js"></script>
+</body>
+</html>
