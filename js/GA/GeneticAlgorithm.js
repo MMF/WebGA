@@ -247,9 +247,34 @@ class GeneticAlgorithm {
         return this.population[0];
     }
 
-    // Rank Selection Technique
+    /*
+     * Rank Selection Technique
+     * A parent selection technique to overcome the limitation of Roulette Wheel Selection.
+     * Each individual has an almost equal share of the pie.
+     */
     rank_Selection() {
+        // generate ranks (n, n-1, n-2, n-3, .., 1)
+        var ranks = [...Array(this.solutionsCount).keys()].map(n => n + 1).reverse();
+        var sumRank = ranks.reduce((a, b) => a + b);
 
+        // random point on the circle (random sum) 
+        var randomPoint = Math.random() * sumRank;
+
+        var currentSum = 0;
+
+        // Loop through solutions and add their sum
+        for (let s = 0; s < this.solutionsCount; s++) {
+            // add sum of the current solution
+            currentSum += ranks[s];
+            
+            // if currenSum exceed the random sum -> select solution
+            if (currentSum > randomPoint) {
+                return this.population[s];
+            }
+        }
+
+        // return the first solution otherwise
+        return this.population[0];
     }
 
     /* 
