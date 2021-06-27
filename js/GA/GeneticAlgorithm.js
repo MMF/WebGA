@@ -332,8 +332,11 @@ class GeneticAlgorithm {
     // perform mutation
     mutation(solution) {
         // flip mutation
-        var randomPoint = Math.floor(Math.random() * this.genesCount);
-        solution[randomPoint] = (solution[randomPoint] == 1) ? 0 : 1;
+        for (let g = 0; g < this.genesCount; g++) {
+            if (Math.random() >= 0.5) {
+                solution[g] = (solution[g] == 1) ? 0 : 1;
+            }
+        }
 
         return solution;
     }
