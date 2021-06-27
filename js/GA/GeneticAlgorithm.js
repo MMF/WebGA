@@ -219,19 +219,31 @@ class GeneticAlgorithm {
         }
     }
 
-    // RouletteWheel Selection Technique
+    /*
+     * RouletteWheel Selection Technique
+     * The fitter individual has greater chance to be selected.
+     * May lead to premature convergence and loss of diversity.
+     */
     rouletteWheel_Selection() {
+        // Total sum of fitness values
         let sumFitness = this.fitness_values.reduce((a, b) => a + b);
+        
+        // random point on the circle (random sum) 
         var randomPoint = Math.random() * sumFitness;
 
         var currentSum = 0;
+        // Loop through solutions and add their sum
         for (let s = 0; s < this.solutionsCount; s++) {
+            // add sum of the current solution
             currentSum += this.fitness_values[s];
+            
+            // if currenSum exceed the random sum -> select solution
             if (currentSum > randomPoint) {
                 return this.population[s];
             }
         }
 
+        // return the first solution otherwise
         return this.population[0];
     }
 
@@ -240,7 +252,10 @@ class GeneticAlgorithm {
 
     }
 
-    // Tournament Selection Technique
+    /* 
+     * Tournament Selection Technique
+     * Select K individuals from the population at random and select the best out to become a parent.
+     */
     tournament_Selection() {
         // get random subset of solutions
         var randIndexSubset = [...Array(this.solutionsCount).keys()].sort(() => 0.5 - Math.random()).slice(0, this.tournamentSize)
