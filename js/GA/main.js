@@ -6,6 +6,7 @@ $(function () {
             SolutionsCount: parseInt($("#SolutionsCount").val()),
             GenesCount: parseInt($("#GenesCount").val()),
             SelectionTechnique: $("#SelectionTechnique").val(),
+            CrossoverTechnique: $("#CrossoverTechnique").val(),
             CrossoverProbability: $("#CrossoverProbability").val(),
             MutationProbability: $("#MutationProbability").val(),
             ElitismStatus: parseInt($("#ElitismStatus").val()),
@@ -25,13 +26,15 @@ $(function () {
             solutionsCount = params.SolutionsCount,
             genesCount = params.GenesCount,
             fitnessFunc = params.fitnessFunc,
-            parentSelectionTechnique = params.SelectionTechnique,
             crossoverProbability = params.CrossoverProbability,
             mutationprobability = params.MutationProbability,
             enableElitism = params.ElitismStatus,
             tournamentSize = params.TournamentSize,
             plotFunc = params.PlotFunc
         );
+
+        await ga.setParentSelectionTechnique(params.SelectionTechnique);
+        await ga.setCrossoverTechnique(params.CrossoverTechnique);
 
         var result = await ga.start();
 

@@ -1,11 +1,11 @@
 class GeneticAlgorithm {
-    constructor(generationsCount, solutionsCount, genesCount, fitnessFunc, parentSelectionTechnique,
+    // Initialize GA
+    constructor(generationsCount, solutionsCount, genesCount, fitnessFunc,
         crossoverProbability, mutationprobability, enableElitism, tournamentSize, plotFunc) {
         // get control parameters
         this.generationsCount = generationsCount;
         this.solutionsCount = solutionsCount;
         this.genesCount = genesCount;
-        this.parentSelectionTechnique = parentSelectionTechnique;
         this.crossoverProbability = crossoverProbability;
         this.mutationprobability = mutationprobability;
         this.fitnessFunction = fitnessFunc;
@@ -13,9 +13,11 @@ class GeneticAlgorithm {
         this.tournamentSize = tournamentSize;
         this.plotFunc = plotFunc;
 
-        // estimate parent selection technique
-        this.parentSelectionMethod = undefined;
-        this.setParentSelectionTechnique()
+        // default parent selection technique
+        this.parentSelectionMethod = this.rouletteWheel_Selection;
+
+        // default crossover technique
+        this.crossoverMethod = this.singlePoint_Corssover;
 
         // initialize variables
         this.population = [];
@@ -67,7 +69,7 @@ class GeneticAlgorithm {
                 let randNum = Math.random();
                 if (this.crossoverProbability >= randNum) {
                     // perform crossover
-                    offspring = this.crossOver(parent1, parent2)
+                    offspring = this.doCrossOver(parent1, parent2)
                 } else {
                     // take current solution
                     offspring = this.population[s];
@@ -100,24 +102,44 @@ class GeneticAlgorithm {
     }
 
     // estimate parent selection technique based on user's choice
-    setParentSelectionTechnique() {
+    async setParentSelectionTechnique(parentSelectionTechnique) {
         // default parent selection method
         var parentSelectionMethod = this.rouletteWheel_Selection;
 
-        if (this.parentSelectionTechnique == 1) {
+        if (parentSelectionTechnique == 1) {
             parentSelectionMethod = this.rouletteWheel_Selection;
         }
-        else if (this.parentSelectionTechnique == 2) {
+        else if (parentSelectionTechnique == 2) {
             parentSelectionMethod = this.rank_Selection;
         }
-        else if (this.parentSelectionTechnique == 3) {
+        else if (parentSelectionTechnique == 3) {
             parentSelectionMethod = this.tournament_Selection
         }
 
         this.parentSelectionMethod = parentSelectionMethod;
     }
 
-    // initialize population before starting the optimization process
+    async setCrossoverTechnique(crossOverTechnique) {
+        // default crossover technique
+        var crossover = this.singlePoint_Corssover;
+
+        if (crossOverTechnique == 1) {
+            crossover = this.singlePoint_Corssover;
+        }
+        else if (crossOverTechnique == 2) {
+            crossover = this.twoPoints_Crossover;
+        }
+        else if (crossOverTechnique == 3) {
+            crossover = this.uniform_Crossover;
+        }
+
+        this.crossoverMethod = crossover;
+    }
+
+    /*
+     * initialize population before starting the optimization process
+     * Binary encoding is used to represent solutions
+     */
     initializePopulation() {
         for (let i = 0; i < this.solutionsCount; i++) {
             // solution
@@ -181,44 +203,6 @@ class GeneticAlgorithm {
         return this.parentSelectionMethod();
     }
 
-    // perform crossover
-    crossOver(parent1, parent2) {
-        // single-point crossover
-        var randomPoint = Math.floor(Math.random() * this.genesCount)
-
-        var child = [];
-        for (let g = 0; g < this.genesCount; g++) {
-            if (g < randomPoint) {
-                child.push(parent1[g])
-            } else {
-                child.push(parent2[g])
-            }
-        }
-
-        return child;
-    }
-
-    // perform mutation
-    mutation(solution) {
-        // flip mutation
-        var randomPoint = Math.floor(Math.random() * this.genesCount);
-        solution[randomPoint] = (solution[randomPoint] == 1) ? 0 : 1;
-
-        return solution;
-    }
-
-    // log current generation
-    log(generationNum) {
-        console.log("Generation = " + generationNum + ", Best Fitness = " + this.bestFitness, ', Best Solution = ' + this.bestSolution);
-        console.log("---------------------------------------------------")
-    }
-
-    plot(generationNum) {
-        if (typeof this.plotFunc == 'function') {
-            this.plotFunc(generationNum, this.bestFitness)
-        }
-    }
-
     /*
      * RouletteWheel Selection Technique
      * The fitter individual has greater chance to be selected.
@@ -227,7 +211,7 @@ class GeneticAlgorithm {
     rouletteWheel_Selection() {
         // Total sum of fitness values
         let sumFitness = this.fitness_values.reduce((a, b) => a + b);
-        
+
         // random point on the circle (random sum) 
         var randomPoint = Math.random() * sumFitness;
 
@@ -236,7 +220,7 @@ class GeneticAlgorithm {
         for (let s = 0; s < this.solutionsCount; s++) {
             // add sum of the current solution
             currentSum += this.fitness_values[s];
-            
+
             // if currenSum exceed the random sum -> select solution
             if (currentSum > randomPoint) {
                 return this.population[s];
@@ -266,7 +250,7 @@ class GeneticAlgorithm {
         for (let s = 0; s < this.solutionsCount; s++) {
             // add sum of the current solution
             currentSum += ranks[s];
-            
+
             // if currenSum exceed the random sum -> select solution
             if (currentSum > randomPoint) {
                 return this.population[s];
@@ -290,5 +274,83 @@ class GeneticAlgorithm {
 
         // return best
         return this.population[randIndexSubset[0]]
+    }
+
+    // perform crossover
+    doCrossOver(parent1, parent2) {
+        // single-point crossover
+        return this.crossoverMethod(parent1, parent2);
+    }
+
+    // single-point crossover
+    singlePoint_Corssover(parent1, parent2) {
+        var randomPoint = Math.floor(Math.random() * this.genesCount)
+
+        var child = [];
+        for (let g = 0; g < this.genesCount; g++) {
+            if (g < randomPoint) {
+                child.push(parent1[g])
+            } else {
+                child.push(parent2[g])
+            }
+        }
+
+        return child;
+    }
+
+    // two points crossover
+    twoPoints_Crossover(parent1, parent2) {
+        // get random two points
+        var points = [...Array(6).keys()].sort(() => 0.5 - Math.random()).slice(0, 2).sort()
+
+        var child = [];
+        for (let g = 0; g < this.genesCount; g++) {
+            if (g < points[0] || g > points[1]) {
+                child.push(parent1[g]);
+            } else {
+                child.push(parent2[g]);
+            }
+        }
+
+        return child;
+    }
+
+    // uniform crossover
+    uniform_Crossover(parent1, parent2) {
+        var child = [];
+        for (let g = 0; g < this.genesCount; g++) {
+            if (Math.random() >= 0.5) {
+                child.push(parent1[g]);
+            } else {
+                child.push(parent2[g]);
+            }
+        }
+
+        return child;
+    }
+
+    // perform mutation
+    mutation(solution) {
+        // flip mutation
+        var randomPoint = Math.floor(Math.random() * this.genesCount);
+        solution[randomPoint] = (solution[randomPoint] == 1) ? 0 : 1;
+
+        return solution;
+    }
+
+    // log current generation
+    log(generationNum) {
+        console.log("Generation = " + generationNum + ", Best Fitness = " + this.bestFitness, ', Best Solution = ' + this.bestSolution);
+        console.log("---------------------------------------------------")
+    }
+
+    /*
+     * call external plot/log function
+     * used for plotting convergence curve and logging
+     */
+    plot(generationNum) {
+        if (typeof this.plotFunc == 'function') {
+            this.plotFunc(generationNum, this.bestFitness)
+        }
     }
 }
