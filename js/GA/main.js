@@ -2,19 +2,22 @@ $(function () {
     // control parameters
     function getControlParams() {
         return {
-            GenerationsCount: $("#GenerationsCount").val(),
-            SolutionsCount: $("#SolutionsCount").val(),
-            GenesCount: $("#GenesCount").val(),
+            GenerationsCount: parseInt($("#GenerationsCount").val()),
+            SolutionsCount: parseInt($("#SolutionsCount").val()),
+            GenesCount: parseInt($("#GenesCount").val()),
             SelectionTechnique: $("#SelectionTechnique").val(),
             CrossoverProbability: $("#CrossoverProbability").val(),
             MutationProbability: $("#MutationProbability").val(),
-            ElitismStatus: $("#ElitismStatus").val(),
+            ElitismStatus: parseInt($("#ElitismStatus").val()),
+            TournamentSize: parseInt($("#TournamentSize").val()),
             PlotFunc: plotConvergence,
             fitnessFunc: sphere
         };
     }
 
     async function RunGA() {
+        $("#RunGABtn").prop('disabled', true)
+
         var params = getControlParams()
 
         var ga = new GeneticAlgorithm(
@@ -26,21 +29,41 @@ $(function () {
             crossoverProbability = params.CrossoverProbability,
             mutationprobability = params.MutationProbability,
             enableElitism = params.ElitismStatus,
+            tournamentSize = params.TournamentSize,
             plotFunc = params.PlotFunc
         );
 
         var result = await ga.start();
 
         // show best solution
+        $("#RunGABtn").prop('disabled', false)
         $("#BestSolution").html(ga.bestSolution)
         $("#BestSolutionContainer").slideDown()
     }
 
     // run GA on button click
     $("#RunGABtn").click(function () {
+        // validate that tournament size is not greater than solutions count
+        var solCount = parseInt($("#SolutionsCount").val())
+        var tournamentSize = parseInt($("#TournamentSize").val())
+
+        if ($("#SelectionTechnique").val() == 3 && solCount < tournamentSize) {
+            alert("Tournament size can not exceed solutions count!");
+            return false;
+        }
+
         resetView()
 
         RunGA();
+    })
+
+    // handle selection
+    $("#SelectionTechnique").change(function () {
+        if ($(this).val() == 3) {
+            $("#TournamentSizeContainer").show()
+        } else {
+            $("#TournamentSizeContainer").hide()
+        }
     })
 
     function resetView() {
@@ -53,7 +76,7 @@ $(function () {
         // convert from binary to decimal
         var num = parseInt(sol.join(""), 2)
 
-        return num ^ 2;
+        return Math.pow(num, 2);
     }
 
     function plotConvergence(generationNum, bestFitness) {

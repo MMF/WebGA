@@ -1,6 +1,6 @@
 class GeneticAlgorithm {
-    constructor(generationsCount, solutionsCount, genesCount, fitnessFunc, parentSelectionTechnique, 
-                crossoverProbability, mutationprobability, enableElitism, LogFunc) {
+    constructor(generationsCount, solutionsCount, genesCount, fitnessFunc, parentSelectionTechnique,
+        crossoverProbability, mutationprobability, enableElitism, tournamentSize, plotFunc) {
         // get control parameters
         this.generationsCount = generationsCount;
         this.solutionsCount = solutionsCount;
@@ -10,6 +10,7 @@ class GeneticAlgorithm {
         this.mutationprobability = mutationprobability;
         this.fitnessFunction = fitnessFunc;
         this.enableElitism = enableElitism;
+        this.tournamentSize = tournamentSize;
         this.plotFunc = plotFunc;
 
         // estimate parent selection technique
@@ -52,10 +53,10 @@ class GeneticAlgorithm {
             // Elitism
             var elitismCount = 0;
             if (this.enableElitism == 1) {
-                this.elitism();    
+                this.elitism();
                 elitismCount = 1;
             }
-            
+
             for (let s = elitismCount; s < this.solutionsCount; s++) {
                 // Parent Selection
                 var parent1 = this.selectParent();
@@ -107,10 +108,10 @@ class GeneticAlgorithm {
             parentSelectionMethod = this.rouletteWheel_Selection;
         }
         else if (this.parentSelectionTechnique == 2) {
-            parentSelectionMethod = this.Rank_Selection;
+            parentSelectionMethod = this.rank_Selection;
         }
         else if (this.parentSelectionTechnique == 3) {
-            parentSelectionMethod = this.Tournament_Selection
+            parentSelectionMethod = this.tournament_Selection
         }
 
         this.parentSelectionMethod = parentSelectionMethod;
@@ -241,6 +242,13 @@ class GeneticAlgorithm {
 
     // Tournament Selection Technique
     tournament_Selection() {
+        // get random subset of solutions
+        var randIndexSubset = [...Array(this.solutionsCount).keys()].sort(() => 0.5 - Math.random()).slice(0, this.tournamentSize)
 
+        // sort by fitness desc
+        randIndexSubset.sort((a, b) => this.fitness_values[a] < this.fitness_values[b] ? -1 : (this.fitness_values[b] < this.fitness_values[a]) | 0).reverse();
+
+        // return best
+        return this.population[randIndexSubset[0]]
     }
 }
