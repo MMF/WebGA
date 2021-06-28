@@ -1,6 +1,9 @@
 # WebGA
 Web-based Genetic Algorithm for demonstration purposes. [Visit WebGA](https://mmf.github.io/WebGA/)
 
+![GA Flowchart](https://mmf.github.io/WebGA/img/flowchart.jpg "GA Flowchart")
+
+
 The following techniques have been implemented:
 
 ### Selection Techniques
