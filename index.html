@@ -15,20 +15,31 @@
 
 <body>
     <div class="container mt-3">
+        <div class="alert alert-secondary" role="alert">
+            Web-based Genetic Algorithm for demonstration Purposes. 
+            <a href="https://github.com/MMF/WebGA" class="btn btn-warning btn-sm float-end" target="_blank">
+            Source Code
+            </a>
+        </div>
+
         <div class="row">
             <div class="col-md-9 mb-2">
                 <div class="card">
-                    <div class="card-header bg-success text-white">Control Parameters</div>
+                    <div class="card-header bg-success text-white">
+                        <strong>Control Parameters</strong>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4 col-sm-12 mb-2">
                                 <strong>Generations Count</strong><br />
-                                <input type="number" class="form-control" id="GenerationsCount" value="30" min="10" max="500" />
+                                <input type="number" class="form-control" id="GenerationsCount" value="30" min="10"
+                                    max="500" />
                             </div>
 
                             <div class="col-md-4 col-sm-12 mb-2">
                                 <strong>Solutions Count</strong><br />
-                                <input type="number" class="form-control" id="SolutionsCount" value="6" min="2" max="50" />
+                                <input type="number" class="form-control" id="SolutionsCount" value="6" min="2"
+                                    max="50" />
                             </div>
 
                             <div class="col-md-4 col-sm-12 mb-2">
@@ -89,7 +100,7 @@
                                     <option value="1">1</option>
                                 </select>
                             </div>
-                            
+
                             <div class="col-md-4 col-sm-12">
                                 <strong>Elitism</strong><br />
                                 <select class="form-control" id="ElitismStatus">
@@ -100,7 +111,8 @@
 
                             <div class="col-md-4 col-sm-12" id="TournamentSizeContainer" style="display: none;">
                                 <strong>Tournament Size</strong><br />
-                                <input type="number" class="form-control" id="TournamentSize" value="3" min="2" max="50" />
+                                <input type="number" class="form-control" id="TournamentSize" value="3" min="2"
+                                    max="50" />
                             </div>
 
                             <div class="col-md-4 col-sm-12">
@@ -122,7 +134,9 @@
 
             <div class="col-md-3 col-sm-12 mb-2">
                 <div class="card h-100">
-                    <div class="card-header bg-primary text-white">Fitness Function (Sphere)</div>
+                    <div class="card-header bg-primary text-white">
+                        <strong>Fitness Function (Sphere)</strong>
+                    </div>
                     <div class="card-body">
                         <img src="img/F1.png" class="img-fluid mt-3" />
                     </div>
@@ -133,7 +147,9 @@
         <div class="row mb-2">
             <div class="col-md-4 col-sm-12 mb-2">
                 <div class="card pb-2">
-                    <div class="card-header bg-primary text-white">Log</div>
+                    <div class="card-header bg-primary text-white">
+                        <strong>Log</strong>
+                    </div>
                     <div class="card-body" style="min-height: 300px; max-height: 300px; overflow-y: scroll;">
                         <div class="mb-2" id="BestSolutionContainer" style="display: none;">
                             <span class="badge bg-secondary">Best Solution</span> &nbsp;
@@ -154,12 +170,21 @@
             </div>
             <div class="col-md-8 col-sm-12 mb-3">
                 <div class="card">
-                    <div class="card-header bg-danger text-white">Convergence Curve</div>
+                    <div class="card-header bg-danger text-white">
+                        <strong>Convergence Curve</strong>
+                    </div>
                     <div class="card-body" style="min-height: 300px;">
                         <canvas class="w-100" id="ConvergenceCurve" style="height: 250px;"></canvas>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="text-center mb-2">
+            developer by 
+            <a href="https://scholar.google.com/citations?user=-50Yh_AAAAAJ&hl=en" target="_blank">
+                Mohamad M. Fouad
+            </a>
         </div>
     </div>
 
