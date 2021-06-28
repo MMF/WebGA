@@ -23,17 +23,17 @@
                         <div class="row">
                             <div class="col-md-4 col-sm-12 mb-2">
                                 <strong>Generations Count</strong><br />
-                                <input type="number" class="form-control" id="GenerationsCount" value="30" />
+                                <input type="number" class="form-control" id="GenerationsCount" value="30" min="10" max="500" />
                             </div>
 
                             <div class="col-md-4 col-sm-12 mb-2">
                                 <strong>Solutions Count</strong><br />
-                                <input type="number" class="form-control" id="SolutionsCount" value="6" />
+                                <input type="number" class="form-control" id="SolutionsCount" value="6" min="2" max="50" />
                             </div>
 
                             <div class="col-md-4 col-sm-12 mb-2">
                                 <strong>Genes Count</strong><br />
-                                <input type="number" class="form-control" id="GenesCount" value="10" />
+                                <input type="number" class="form-control" id="GenesCount" value="10" min="2" max="50" />
                             </div>
                         </div>
 
@@ -100,7 +100,7 @@
 
                             <div class="col-md-4 col-sm-12" id="TournamentSizeContainer" style="display: none;">
                                 <strong>Tournament Size</strong><br />
-                                <input type="number" class="form-control" id="TournamentSize" value="3" />
+                                <input type="number" class="form-control" id="TournamentSize" value="3" min="2" max="50" />
                             </div>
 
                             <div class="col-md-4 col-sm-12">
@@ -122,9 +122,9 @@
 
             <div class="col-md-3 col-sm-12 mb-2">
                 <div class="card h-100">
-                    <div class="card-header bg-primary text-white">Fitness Function</div>
+                    <div class="card-header bg-primary text-white">Fitness Function (Sphere)</div>
                     <div class="card-body">
-                        <img src="img/F1.png" class="img-fluid mt-2" />
+                        <img src="img/F1.png" class="img-fluid mt-3" />
                     </div>
                 </div>
             </div>
@@ -166,8 +166,8 @@
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/chart.min.js"></script>
-    <script src="js/GA/GeneticAlgorithm.js?v=7"></script>
-    <script src="js/GA/main.js?v=7"></script>
+    <script src="js/GA/GeneticAlgorithm.js?v=8"></script>
+    <script src="js/GA/main.js?v=8"></script>
 </body>
 
 </html>
